@@ -1,6 +1,7 @@
 package com.jetchoco.ithelparchitecture.data
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.jetchoco.ithelparchitecture.api.RetrofitManager
 import com.jetchoco.ithelparchitecture.data.model.Repo
 import com.jetchoco.ithelparchitecture.data.model.RepoSearchResponse
@@ -16,7 +17,8 @@ class DataModel {
 
     private val githubService = RetrofitManager.getAPI()
 
-    fun searchRepo(query: String, callback: OnDataReadyCallback) {
+    fun searchRepo(query: String): MutableLiveData<List<Repo>> {
+        val repos = MutableLiveData<List<Repo>>()
         githubService.searchRepos(query).enqueue(object : Callback<RepoSearchResponse> {
             override fun onFailure(call: Call<RepoSearchResponse>, t: Throwable) {
                 // TODO handle error
@@ -28,13 +30,10 @@ class DataModel {
                 response: Response<RepoSearchResponse>
             ) {
                 if (response.isSuccessful) {
-                    callback.onDataReady(response.body()!!.items!!)
+                    repos.value = response.body()!!.items
                 }
             }
         })
-    }
-
-    interface OnDataReadyCallback {
-        fun onDataReady(data: List<Repo>)
+        return repos
     }
 }

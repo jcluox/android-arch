@@ -2,6 +2,7 @@ package com.jetchoco.ithelparchitecture.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -62,7 +63,7 @@ class RepoFragment : Fragment() {
 
     private fun doSearch() {
         val query = binding.edtQuery.text.toString()
-        if (query.isEmpty()) {
+        if (TextUtils.isEmpty(query)) {
             repoAdapter.swapItems(ArrayList())
             return
         }
