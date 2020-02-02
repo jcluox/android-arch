@@ -57,7 +57,12 @@ class RepoFragment : Fragment() {
         viewModel = ViewModelProvider(this, factory).get(RepoViewModel::class.java)
         binding.viewModel = viewModel
         viewModel.repos().observe(this, Observer {
-            repoAdapter.swapItems(it)
+            viewModel.isLoading.set(false)
+            if (it.isSuccessful()) {
+                repoAdapter.swapItems(it.body!!.items!!)
+            } else {
+                // TODO show error message
+            }
         })
     }
 
