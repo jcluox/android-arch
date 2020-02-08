@@ -11,7 +11,9 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        BuildersModule::class
+        ActivityBuildersModule::class,
+        FragmentBuildersModule::class,
+        NetworkModule::class
     ]
 )
 interface AppComponent {
@@ -21,6 +23,7 @@ interface AppComponent {
         // 給上述的modules(AppModule, BuildersModule的constructor塞進application與provides application)
         @BindsInstance
         fun application(application: GithubApp): Builder
+
         fun build(): AppComponent
     }
 
