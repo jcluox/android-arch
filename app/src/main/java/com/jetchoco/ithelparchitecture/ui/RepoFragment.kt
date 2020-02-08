@@ -13,12 +13,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jetchoco.ithelparchitecture.databinding.FragmentRepoBinding
+import com.jetchoco.ithelparchitecture.di.Injectable
 import com.jetchoco.ithelparchitecture.vm.GithubViewModelFactory
 import com.jetchoco.ithelparchitecture.vm.RepoViewModel
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class RepoFragment : Fragment() {
+class RepoFragment : Fragment(), Injectable {
 
     companion object {
         const val TAG = "RepoFragment"
@@ -27,7 +27,8 @@ class RepoFragment : Fragment() {
         }
     }
 
-    @Inject lateinit var factory: GithubViewModelFactory
+    @Inject
+    lateinit var factory: GithubViewModelFactory
     private lateinit var viewModel: RepoViewModel
     private lateinit var binding: FragmentRepoBinding
     private var repoAdapter = RepoAdapter(ArrayList())
@@ -52,11 +53,6 @@ class RepoFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = repoAdapter
         return binding.root
-    }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

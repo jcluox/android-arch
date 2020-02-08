@@ -1,6 +1,7 @@
 package com.jetchoco.ithelparchitecture
 
 import android.app.Application
+import com.jetchoco.ithelparchitecture.di.AppInjector
 import com.jetchoco.ithelparchitecture.di.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -18,6 +19,8 @@ class GithubApp : Application(), HasAndroidInjector {
             .application(this)
             .build()
             .inject(this)
+
+        AppInjector.init(this)
     }
 
     override fun androidInjector() = dispatchingAndroidInjector

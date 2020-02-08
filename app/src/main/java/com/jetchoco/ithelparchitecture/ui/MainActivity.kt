@@ -3,16 +3,15 @@ package com.jetchoco.ithelparchitecture.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.jetchoco.ithelparchitecture.R
-import dagger.android.AndroidInjection
+import com.jetchoco.ithelparchitecture.di.Injectable
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Injectable {
 
     companion object {
         private const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
