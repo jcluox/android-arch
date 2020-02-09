@@ -2,19 +2,31 @@ package com.jetchoco.ithelparchitecture.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.jetchoco.ithelparchitecture.data.DataModel
 import javax.inject.Inject
+import javax.inject.Provider
 import javax.inject.Singleton
 
 @Singleton
-class GithubViewModelFactory @Inject constructor(val dataModel: DataModel) :
+class GithubViewModelFactory @Inject constructor(private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>) :
     ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RepoViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return RepoViewModel(dataModel) as T
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        var creator: Provider<ViewModel>? = creators[modelClass]
+        if (creator == null) {
+            for ((key, value) in creators) {
+                if (modelClass.isAssignableFrom(key)) {
+                    creator = value
+                    break
+                }
+            }
         }
-        throw IllegalArgumentException("No such model class")
+        if (creator == null) throw IllegalArgumentException("unknown model class " + modelClass)
+        try {
+            // 於此才實體化
+            return creator.get() as T
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 }
